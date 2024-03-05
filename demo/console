@@ -1,0 +1,40 @@
+#!/usr/bin/env php
+<?php
+
+use DatabaseImporter\DatabaseImporterCommand;
+use DatabaseImporter\model\Database;
+use DatabaseImporter\model\DatabaseImporterCommandConfigInterface;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\ArgvInput;
+
+
+set_time_limit(0);
+
+require dirname(__DIR__) . '/vendor/autoload.php';
+
+class ExampleDatabaseImporterCommand extends DatabaseImporterCommand implements DatabaseImporterCommandConfigInterface
+{
+    public function getSource(): Database
+    {
+        return new Database(
+            "source_database_test",
+            "127.0.0.1",
+            "username",
+            "password"
+        );
+    }
+
+    public function getDestination(): Database
+    {
+        return new Database(
+            "destination_database_test",
+            "127.0.0.1",
+            "username",
+            "password"
+        );
+    }
+}
+
+$application = new Application();
+$application->add(new ExampleDatabaseImporterCommand());
+$application->run(new ArgvInput());

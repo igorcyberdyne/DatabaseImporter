@@ -1,0 +1,11 @@
+{
+  "require": {
+    "php": ">=7.2",
+    "symfony/console": "^5.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "DatabaseImporter\\": "src/"
+    }
+  }
+}

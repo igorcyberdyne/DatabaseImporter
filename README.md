@@ -32,8 +32,8 @@ Les méthodes de l'interface permettent de renseigner les données de connexion 
 ```php
 interface DatabaseImporterCommandConfigInterface
 {
-    public function source(): Database;
-    public function destination(): Database;
+    public function getSource(): Database;
+    public function getDestination(): Database;
 }
 ```
 
@@ -52,35 +52,8 @@ class Database
 }
 ```
 
-#### 2. Exemple d'implémentation :
-
-`- Création de la commande`
-```php
-class ExampleDatabaseImporterCommand extends DatabaseImporterCommand implements DatabaseImporterCommandConfigInterface
-{
-    public function source(): Database
-    {
-        return new Datatabase(
-            "source_database_test",
-            "127.0.0.1",
-            "username",
-            "password"
-        );
-    }
-    
-    public function destination(): Database
-    {
-        return new Datatabase(
-            "destination_database_test",
-            "127.0.0.1",
-            "username",
-            "password"
-        );
-    }
-}
-```
-
-`- Fichier principale (console)`
+#### 2. Exemple d'implémentation
+`- Fichier principale (DatabaseImporter > demo > console)`
 ```php
 #!/usr/bin/env php
 <?php
@@ -88,6 +61,28 @@ class ExampleDatabaseImporterCommand extends DatabaseImporterCommand implements 
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 
+class ExampleDatabaseImporterCommand extends DatabaseImporterCommand implements DatabaseImporterCommandConfigInterface
+{
+    public function getSource(): Database
+    {
+        return new Database(
+            "source_database_test",
+            "127.0.0.1",
+            "username",
+            "password"
+        );
+    }
+    
+    public function getDestination(): Database
+    {
+        return new Database(
+            "destination_database_test",
+            "127.0.0.1",
+            "username",
+            "password"
+        );
+    }
+}
 
 $application = new Application();
 $application->add(new ExampleDatabaseImporterCommand());
@@ -96,10 +91,4 @@ $application->run(new ArgvInput());
 
 `- Exécution de la commande depuis la racine du projet`
 
-    php console app:database-importer
-
-### Application de démonstration
-Pour voir un exemple beaucoup plus complet, consultez la démonstration dans le **projet** `DatabaseImporter > DemoApp`.
-Vous pouvez également exécuter la démo directement depuis la racine du projet, avec la commande suivante.
-
-    php DemoApp\DemoApp.php
+    php demo/console app:database-importer
