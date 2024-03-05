@@ -12,7 +12,7 @@ Vous devez avoir ces base de données installées sur votre machine ou serveur
 
 ### Comment installer ?
 Vous pouvez
-> Télécharger le composant sur [`github` ekolotech/mobilemoney-gateway](https://github.com/igorcyberdyne/DatabaseImporter.git)
+> Télécharger le composant sur [`github` ekolotech/database-importer](https://github.com/igorcyberdyne/DatabaseImporter.git)
 
 OU exécuter la commande ci-dessous dans la console
 

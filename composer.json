@@ -1,4 +1,27 @@
 {
+  "name": "ekolotech/database-importer",
+  "description": "Allow to import a database into another database",
+  "type": "library",
+  "homepage": "https://github.com/igorcyberdyne/DatabaseImporter",
+  "keywords": [
+    "php",
+    "mysql",
+    "mariadb"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "EKOLOTECH",
+      "email": "contact@kolotech.fr",
+      "homepage": "https://ekolotech.fr"
+    },
+    {
+      "name": "Igor GAMATH",
+      "email": "igorcyberdyne@gmail.com",
+      "homepage": "https://www.linkedin.com/in/igor-gamath-11b10314a",
+      "role": "Developer"
+    }
+  ],
   "require": {
     "php": ">=7.2",
     "symfony/console": "^5.4"
