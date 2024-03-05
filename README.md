@@ -22,7 +22,7 @@ OU exécuter la commande ci-dessous dans la console
 ### ------------------------------------- CAS D'UTILISATION ------------------------------------
 Pour effectuer l'import vous devez créer une commande, la configurée puis l'exécuter.
 La commande que vous créez doit hériter la classe `DatabaseImporterCommand` 
-et implémenter l'interface de configuration des bases source et de destination `DatabaseImporterCommandConfigInterface`.
+et implémenter l'interface de configuration des bases de données source et de destination `DatabaseImporterCommandConfigInterface`.
 
 Les méthodes de l'interface permettent de renseigner les données de connexion aux bases de données source et de destination.
 
@@ -42,10 +42,10 @@ interface DatabaseImporterCommandConfigInterface
 class Database
 {
     public function __construct(
-        public readonly string $name, // Nom de la base
-        public readonly string $host, // le host du serveur
-        public readonly string $user, // l'utilisateur sur lequel se connecter
-        public readonly string $password, // le mot de passe de l'utilisateur
+        string $name, // Nom de la base
+        string $host, // le host du serveur
+        string $user, // l'utilisateur sur lequel se connecter
+        string $password, // le mot de passe de l'utilisateur
     )
     {
     }
