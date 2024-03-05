@@ -91,4 +91,11 @@ $application->run(new ArgvInput());
 
 `- Exécution de la commande depuis la racine du projet`
 
+Un fichier `MigrationV.*.sql` sera créé dans le répertoire temporaire de votre machine ou serveur
+
     php demo/console app:database-importer
+
+En ajoutant le paramètre `migrationDir` contenant le chemin vers le répertoire de destination du dump sql, le fichier `MigrationV.*.sql` sera créé dans ce dernier. 
+Dans le cas de la commande ci-dessous, il sera créé à la racine du projet.
+
+    php demo/console app:database-importer --migrationDir='C:\Project\DatabaseImporter'
