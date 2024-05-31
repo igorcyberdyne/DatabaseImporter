@@ -1,16 +1,14 @@
-# ekolotech/database-importer
-
-**Auteur :** [@igorcyberdyne](https://github.com/igorcyberdyne), [@EKOLOTECH](https://ekolotech.fr)
+# ekolotech/database-importer [![PHP version >= 7.2](https://github.com/igorcyberdyne/DatabaseImporter)](https://www.php.net/releases/7_2_0.php)
 
 **ekolotech/database-importer** est un composant commande permettant d'importer une base de données dite `source` vers une autre base de données dite de `destination`
 
-### Base de données prise en charge
+**Auteur :** [@igorcyberdyne](https://github.com/igorcyberdyne), [@EKOLOTECH](https://ekolotech.fr)
+
+## Base de données prise en charge
 - Mysql
 - MariaDB
 
-Vous devez avoir ces base de données installées sur votre machine ou serveur
-
-### Comment installer ?
+## Installation
 Vous pouvez
 > Télécharger le composant sur [`github` ekolotech/database-importer](https://github.com/igorcyberdyne/DatabaseImporter.git)
 
@@ -19,7 +17,7 @@ OU exécuter la commande ci-dessous dans la console
     composer require ekolotech/database-importer
 
 
-### ------------------------------------- CAS D'UTILISATION ------------------------------------
+## CAS D'UTILISATION
 Pour effectuer l'import vous devez créer une commande, la configurée puis l'exécuter.
 La commande que vous créez doit hériter la classe `DatabaseImporterCommand` 
 et implémenter l'interface de configuration des bases de données source et de destination `DatabaseImporterCommandConfigInterface`.
