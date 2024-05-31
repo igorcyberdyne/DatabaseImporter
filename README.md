@@ -53,14 +53,20 @@ class Database
 #### 2. Exemple d'implémentation
 `- Fichier principale (DatabaseImporter > demo > console)`
 ```php
-#!/usr/bin/env php
 <?php
 
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Input\ArgvInput;
+use DatabaseImporter\Argv;
+use DatabaseImporter\CommandHandler;
+use DatabaseImporter\model\Database;
+use DatabaseImporter\model\DatabaseImporterCommandConfigInterface;
 
-class ExampleDatabaseImporterCommand extends DatabaseImporterCommand implements DatabaseImporterCommandConfigInterface
+class ExampleDatabaseImporterCommandConfig implements DatabaseImporterCommandConfigInterface
 {
+    public function getCommandName(): ?string
+    {
+        return null; // ou définir le nom de la commande tel que "importer-database-command"
+    }
+    
     public function getSource(): Database
     {
         return new Database(
@@ -82,16 +88,27 @@ class ExampleDatabaseImporterCommand extends DatabaseImporterCommand implements 
     }
 }
 
-$application = new Application();
-$application->add(new ExampleDatabaseImporterCommand());
-$application->run(new ArgvInput());
+$commandHandler = new CommandHandler();
+$commandHandler->set(new ExampleDatabaseImporterCommandConfig());
+
+try {
+    $commandHandler->run(new Argv());
+} catch (Exception $e) {
+    die($e->getMessage());
+}
 ```
 
 `- Exécution de la commande depuis la racine du projet`
 
 Un fichier `MigrationV.*.sql` sera créé dans le répertoire temporaire de votre machine ou serveur
 
+Si vous ne redinifissez pas le nom de la commande :
+
     php demo/console app:database-importer
+
+si vous redinifissez le nom de la commande lors de votre implémentation :
+
+    php demo/console [commandName]
 
 En ajoutant le paramètre `migrationDir` contenant le chemin vers le répertoire de destination du dump sql, le fichier `MigrationV.*.sql` sera créé dans ce dernier. 
 Dans le cas de la commande ci-dessous, il sera créé à la racine du projet.

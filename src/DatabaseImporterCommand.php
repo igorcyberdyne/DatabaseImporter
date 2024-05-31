@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-abstract class DatabaseImporterCommand extends Command
+class DatabaseImporterCommand extends Command
 {
     /**
      * @var string
@@ -33,19 +33,14 @@ abstract class DatabaseImporterCommand extends Command
     protected $destination;
 
 
-    public function __construct()
+    public function __construct(DatabaseImporterCommandConfigInterface $commandConfig)
     {
-        parent::__construct('app:database-importer');
-        $this->setDescription("to import a database into another database");
+        parent::__construct($commandConfig->getCommandName() ?? "app:database-importer");
 
-        $this->source = $this->destination = new Database("", "", "", "");
-
-        if ($this instanceof DatabaseImporterCommandConfigInterface) {
-            $this->source = $this->getSource();
-            $this->destination = $this->getDestination();
-        }
-
+        $this->source = $commandConfig->getSource();
+        $this->destination = $commandConfig->getDestination();
         $this->migrationDir = sys_get_temp_dir();
+        $this->setDescription("to import a database into another database");
     }
 
 
@@ -173,9 +168,11 @@ abstract class DatabaseImporterCommand extends Command
         foreach ($requiredAttributes as $attribute) {
             $method = "get" . ucfirst($attribute);
 
-            if (empty($this->source->$method()) || empty($this->destination->$method())) {
-                return false;
+            if (!(empty($this->source->$method()) || empty($this->destination->$method()))) {
+                continue;
             }
+
+            return false;
         }
 
         return true;
