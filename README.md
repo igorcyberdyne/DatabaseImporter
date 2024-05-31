@@ -30,6 +30,7 @@ Les méthodes de l'interface permettent de renseigner les données de connexion 
 ```php
 interface DatabaseImporterCommandConfigInterface
 {
+    public function getCommandName(): ?string;
     public function getSource(): Database;
     public function getDestination(): Database;
 }

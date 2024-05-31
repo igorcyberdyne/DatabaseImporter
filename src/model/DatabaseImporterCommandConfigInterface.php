@@ -4,6 +4,9 @@ namespace DatabaseImporter\model;
 
 interface DatabaseImporterCommandConfigInterface
 {
+    /**
+     * @return string|null
+     */
     public function getCommandName(): ?string;
 
     /**
