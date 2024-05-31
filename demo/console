@@ -1,19 +1,23 @@
 #!/usr/bin/env php
 <?php
 
-use DatabaseImporter\DatabaseImporterCommand;
+use DatabaseImporter\Argv;
+use DatabaseImporter\CommandHandler;
 use DatabaseImporter\model\Database;
 use DatabaseImporter\model\DatabaseImporterCommandConfigInterface;
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Input\ArgvInput;
 
 
 set_time_limit(0);
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
-class ExampleDatabaseImporterCommand extends DatabaseImporterCommand implements DatabaseImporterCommandConfigInterface
+class ExampleDatabaseImporterCommandConfig implements DatabaseImporterCommandConfigInterface
 {
+    public function getCommandName(): ?string
+    {
+        return null;
+    }
+
     public function getSource(): Database
     {
         return new Database(
@@ -35,6 +39,12 @@ class ExampleDatabaseImporterCommand extends DatabaseImporterCommand implements 
     }
 }
 
-$application = new Application();
-$application->add(new ExampleDatabaseImporterCommand());
-$application->run(new ArgvInput());
+$commandHandler = new CommandHandler();
+try {
+    $commandHandler
+        ->set(new ExampleDatabaseImporterCommandConfig())
+        ->run(new Argv());
+
+} catch (Exception $e) {
+    die($e->getMessage());
+}
