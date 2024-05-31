@@ -4,7 +4,7 @@
 
 **Auteur :** [@igorcyberdyne](https://github.com/igorcyberdyne), [@EKOLOTECH](https://ekolotech.fr)
 
-## Base de données prise en charge
+## Bases de données prises en charge
 - Mysql
 - MariaDB
 
