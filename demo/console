@@ -21,20 +21,20 @@ class ExampleDatabaseImporterCommandConfig implements DatabaseImporterCommandCon
     public function getSource(): Database
     {
         return new Database(
-            "default_transferoperation",
+            "source_database_test",
             "127.0.0.1",
-            "root",
-            ""
+            "username",
+            "password"
         );
     }
 
     public function getDestination(): Database
     {
         return new Database(
-            "transfer",
+            "destination_database_test",
             "127.0.0.1",
-            "root",
-            ""
+            "username",
+            "password"
         );
     }
 }
