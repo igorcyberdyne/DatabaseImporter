@@ -2,7 +2,7 @@
 
 **ekolotech/database-importer** est un composant commande permettant :
 - d'importer une base de données A dite `source` vers une base de données B dite de `destination`
-- d'exporter une base de données dite `source` vers un fichier
+- d'exporter une base de données dite `source` vers un fichier `.sql`
 - d'importer une base de données depuis un fichier `.sql` vers une base de données dite de `destination`
 
 **Auteur :** [@igorcyberdyne](https://github.com/igorcyberdyne), [@EKOLOTECH](https://ekolotech.fr)
