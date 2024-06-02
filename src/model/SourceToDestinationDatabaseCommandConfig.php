@@ -2,13 +2,8 @@
 
 namespace DatabaseImporter\model;
 
-interface DatabaseImporterCommandConfigInterface
+interface SourceToDestinationDatabaseCommandConfig
 {
-    /**
-     * @return string|null
-     */
-    public function getCommandName(): ?string;
-
     /**
      * @return Database
      */

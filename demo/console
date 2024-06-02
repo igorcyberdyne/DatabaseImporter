@@ -4,47 +4,71 @@
 use DatabaseImporter\Argv;
 use DatabaseImporter\CommandHandler;
 use DatabaseImporter\model\Database;
-use DatabaseImporter\model\DatabaseImporterCommandConfigInterface;
+use DatabaseImporter\model\ExportDatabaseCommandConfig;
+use DatabaseImporter\model\ImportDatabaseCommandConfig;
+use DatabaseImporter\model\SourceToDestinationDatabaseCommandConfig;
 
 
 set_time_limit(0);
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
-class ExampleDatabaseImporterCommandConfig implements DatabaseImporterCommandConfigInterface
+class ExampleSourceToDestinationDatabaseCommandConfig implements SourceToDestinationDatabaseCommandConfig
 {
-    public function getCommandName(): ?string
-    {
-        return null;
-    }
-
     public function getSource(): Database
     {
         return new Database(
-            "source_database_test",
+            "default_transferoperation",
             "127.0.0.1",
-            "username",
-            "password"
+            "root",
+            ""
         );
     }
 
     public function getDestination(): Database
     {
         return new Database(
-            "destination_database_test",
+            "transfer",
             "127.0.0.1",
-            "username",
-            "password"
+            "root",
+            ""
+        );
+    }
+}
+
+class ExampleExportDatabaseCommandConfig implements ExportDatabaseCommandConfig
+{
+    public function getSource(): Database
+    {
+        return new Database(
+            "transfer",
+            "127.0.0.1",
+            "root",
+            ""
+        );
+    }
+}
+
+class ExampleImportDatabaseCommandConfig implements ImportDatabaseCommandConfig
+{
+    public function getDestination(): Database
+    {
+        return new Database(
+            "transfer",
+            "127.0.0.1",
+            "root",
+            ""
         );
     }
 }
 
 $commandHandler = new CommandHandler();
-try {
-    $commandHandler
-        ->set(new ExampleDatabaseImporterCommandConfig())
-        ->run(new Argv());
+$commandHandler->add(new ExampleSourceToDestinationDatabaseCommandConfig());
+$commandHandler->add(new ExampleImportDatabaseCommandConfig());
+$commandHandler->add(new ExampleExportDatabaseCommandConfig());
 
+try {
+    $commandHandler->run(new Argv());
 } catch (Exception $e) {
     die($e->getMessage());
 }
