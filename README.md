@@ -17,26 +17,42 @@ OU exécuter la commande ci-dessous dans la console
     composer require ekolotech/database-importer
 
 
-## CAS D'UTILISATION
-Pour effectuer l'import vous devez créer une commande, la configurée puis l'exécuter.
-La commande que vous créez doit hériter la classe `DatabaseImporterCommand` 
-et implémenter l'interface de configuration des bases de données source et de destination `DatabaseImporterCommandConfigInterface`.
+## Description
+Pour effectuer les opérations décrites dans le tableau ci-dessous, selon le besoin vous devez implémenter 
+les interfaces de configuration des bases de données, utiliser l'instance `CommandHandler`, ajouter les commandes pour déclencher les opérations
+([voir 2. Exemple d'implémentation](#implementation-example)).
 
+
+`- Liste des commandes`
+
+| Nom                                                                                  | description                                                | options                                         | Interface de config                        |
+|--------------------------------------------------------------------------------------|------------------------------------------------------------|-------------------------------------------------|--------------------------------------------|
+| database:import-from-another-database ([exemple ici](#import-from-another-database)) | Importer une  base de données A vers une base de données B | --dumpFilePath="path\to\dir" (facultatif)       | `SourceToDestinationDatabaseCommandConfig` |
+| database:export-to-file ([exemple ici](#export-to-file))                             | Exporter une base de données    vers un fichier            | --migrationDir="path\to\dir" (facultatif)       | `ExportDatabaseCommandConfig`              |
+| database:import-from-file ([exemple ici](#import-from-file))                         | Importer une base de données depuis un fichier             | --dumpFilePath="path\to\file.sql" (obligatoire) | `ImportDatabaseCommandConfig`              |
+
+
+#### 1. Présentation des interfaces de config selon les commandes et le modèle de la base de données :
 Les méthodes de l'interface permettent de renseigner les données de connexion aux bases de données source et de destination.
 
-#### 1. Présentation du modèle :
-
- `DatabaseImporterCommandConfigInterface`
 ```php
-interface DatabaseImporterCommandConfigInterface
+interface SourceToDestinationDatabaseCommandConfig
 {
-    public function getCommandName(): ?string;
     public function getSource(): Database;
+    public function getDestination(): Database;
+}
+
+interface ExportDatabaseCommandConfig
+{
+    public function getSource(): Database;
+}
+
+interface ImportDatabaseCommandConfig
+{
     public function getDestination(): Database;
 }
 ```
 
-`Database`
 ```php
 class Database
 {
@@ -51,46 +67,72 @@ class Database
 }
 ```
 
-#### 2. Exemple d'implémentation
+#### <a id="implementation-example"></a> 2. Exemple d'implémentation
 `- Fichier principale (DatabaseImporter > demo > console)`
+
 ```php
 <?php
 
 use DatabaseImporter\Argv;
 use DatabaseImporter\CommandHandler;
 use DatabaseImporter\model\Database;
-use DatabaseImporter\model\DatabaseImporterCommandConfigInterface;
+use DatabaseImporter\model\ExportDatabaseCommandConfig;
+use DatabaseImporter\model\ImportDatabaseCommandConfig;
+use DatabaseImporter\model\SourceToDestinationDatabaseCommandConfig;
 
-class ExampleDatabaseImporterCommandConfig implements DatabaseImporterCommandConfigInterface
+class ExampleSourceToDestinationDatabaseCommandConfig implements SourceToDestinationDatabaseCommandConfig
 {
-    public function getCommandName(): ?string
-    {
-        return null; // ou définir le nom de la commande tel que "importer-database-command"
-    }
-    
     public function getSource(): Database
     {
         return new Database(
-            "source_database_test",
+            "source_database",
             "127.0.0.1",
-            "username",
-            "password"
+            "root",
+            ""
         );
     }
-    
+
     public function getDestination(): Database
     {
         return new Database(
-            "destination_database_test",
+            "destination_database",
             "127.0.0.1",
-            "username",
-            "password"
+            "root",
+            ""
+        );
+    }
+}
+
+class ExampleExportDatabaseCommandConfig implements ExportDatabaseCommandConfig
+{
+    public function getSource(): Database
+    {
+        return new Database(
+            "source_database",
+            "127.0.0.1",
+            "root",
+            ""
+        );
+    }
+}
+
+class ExampleImportDatabaseCommandConfig implements ImportDatabaseCommandConfig
+{
+    public function getDestination(): Database
+    {
+        return new Database(
+            "destination_database",
+            "127.0.0.1",
+            "root",
+            ""
         );
     }
 }
 
 $commandHandler = new CommandHandler();
-$commandHandler->set(new ExampleDatabaseImporterCommandConfig());
+$commandHandler->add(new ExampleSourceToDestinationDatabaseCommandConfig());
+$commandHandler->add(new ExampleImportDatabaseCommandConfig());
+$commandHandler->add(new ExampleExportDatabaseCommandConfig());
 
 try {
     $commandHandler->run(new Argv());
@@ -99,19 +141,28 @@ try {
 }
 ```
 
-`- Exécution de la commande depuis la racine du projet`
-
-Un fichier `MigrationV.*.sql` sera créé dans le répertoire temporaire de votre machine ou serveur
-
-Si vous ne redinifissez pas le nom de la commande :
-
-    php demo/console app:database-importer
-
-si vous redinifissez le nom de la commande lors de votre implémentation :
+### `- Exécution de la commande depuis la racine du projet`
 
     php demo/console [commandName]
 
-En ajoutant le paramètre `migrationDir` contenant le chemin vers le répertoire de destination du dump sql, le fichier `MigrationV.*.sql` sera créé dans ce dernier. 
-Dans le cas de la commande ci-dessous, il sera créé à la racine du projet.
 
-    php demo/console app:database-importer --migrationDir='C:\Project\DatabaseImporter'
+#### <a id="import-from-another-database"></a> Exemple 1 : Importer une base de données A vers une base de données B.
+
+Si vous précisez l'option `--migrationDir` la base de données A sera enrégistrée dans le répertoire précisé dans un fichier `SQL`
+
+    php demo/console database:import-from-another-database
+
+#### <a id="export-to-file"></a> Exemple 2 : Exporter une base de données vers un fichier
+
+Le fichier exporté se trouve dans le répertoire indiqué, le nom du fichier correspond à ce format `MigrationV.*.sql`.
+Si l'option n'est pas précisée le fichier sera exporté dans le répertoire temporaire de votre système,
+le chemin vers ce repertoire sera indiqué dans la console à la fin de l'exécution.
+
+    php demo/console database:export-to-file --migrationDir='C:\Project\DatabaseImporter'
+
+
+#### <a id="import-from-file"></a> Exemple 3 : Importer une base de données depuis un fichier
+
+Si vous précisez l'option `--migrationDir` la base de données A sera enrégistrée dans le répertoire précisé dans un fichier `SQL`
+
+    php demo/console database:import-from-file --dumpFilePath='C:\Project\DatabaseImporter\database.sql'

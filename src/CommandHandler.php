@@ -2,20 +2,39 @@
 
 namespace DatabaseImporter;
 
-use DatabaseImporter\model\DatabaseImporterCommandConfigInterface;
+use DatabaseImporter\command\ExportDatabaseCommand;
+use DatabaseImporter\command\ImportDatabaseCommand;
+use DatabaseImporter\command\ImportSourceToDestinationDatabaseCommand;
+use DatabaseImporter\model\ExportDatabaseCommandConfig;
+use DatabaseImporter\model\ImportDatabaseCommandConfig;
+use DatabaseImporter\model\SourceToDestinationDatabaseCommandConfig;
 use Exception;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 
 class CommandHandler
 {
-    /**
-     * @var DatabaseImporterCommand
-     */
-    private $command = null;
+    private $commands = [];
 
-    public function set(DatabaseImporterCommandConfigInterface $commandConfig): CommandHandler
+    /**
+     * @param ImportDatabaseCommandConfig|ExportDatabaseCommandConfig|SourceToDestinationDatabaseCommandConfig $commandConfig
+     * @return $this
+     */
+    public function add($commandConfig): CommandHandler
     {
-        $this->command = new DatabaseImporterCommand($commandConfig);
+        $command = null;
+
+        if ($commandConfig instanceof ImportDatabaseCommandConfig) {
+            $command = new ImportDatabaseCommand($commandConfig);
+        } else if ($commandConfig instanceof ExportDatabaseCommandConfig) {
+            $command = new ExportDatabaseCommand($commandConfig);
+        } else if ($commandConfig instanceof SourceToDestinationDatabaseCommandConfig) {
+            $command = new ImportSourceToDestinationDatabaseCommand($commandConfig);
+        }
+
+        if ($command instanceof Command) {
+            $this->commands[] = $command;
+        }
 
         return $this;
     }
@@ -27,12 +46,12 @@ class CommandHandler
      */
     public function run(?Argv $arg = null)
     {
-        if (!$this->command) {
+        if (empty($this->commands)) {
             throw new Exception('Command config not set');
         }
 
         $application = new Application();
-        $application->add($this->command);
+        $application->addCommands($this->commands);
         $application->run($arg);
     }
 }
