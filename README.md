@@ -1,6 +1,9 @@
 # ekolotech/database-importer [![PHP version >= 7.2](https://github.com/igorcyberdyne/DatabaseImporter)](https://www.php.net/releases/7_2_0.php)
 
-**ekolotech/database-importer** est un composant commande permettant d'importer une base de données dite `source` vers une autre base de données dite de `destination`
+**ekolotech/database-importer** est un composant commande permettant :
+- d'importer une base de données A dite `source` vers une base de données B dite de `destination`
+- d'exporter une base de données dite `source` vers un fichier
+- d'importer une base de données depuis un fichier `.sql` vers une base de données dite de `destination`
 
 **Auteur :** [@igorcyberdyne](https://github.com/igorcyberdyne), [@EKOLOTECH](https://ekolotech.fr)
 
@@ -32,7 +35,7 @@ les interfaces de configuration des bases de données, utiliser l'instance `Comm
 | database:import-from-file ([exemple ici](#import-from-file))                         | Importer une base de données depuis un fichier             | --dumpFilePath="path\to\file.sql" (obligatoire) | `ImportDatabaseCommandConfig`              |
 
 
-#### 1. Présentation des interfaces de config selon les commandes et le modèle de la base de données :
+### 1. Présentation des interfaces de config selon les commandes et le modèle de la base de données :
 Les méthodes de l'interface permettent de renseigner les données de connexion aux bases de données source et de destination.
 
 ```php
@@ -67,7 +70,7 @@ class Database
 }
 ```
 
-#### <a id="implementation-example"></a> 2. Exemple d'implémentation
+### <a id="implementation-example"></a> 2. Exemple d'implémentation
 `- Fichier principale (DatabaseImporter > demo > console)`
 
 ```php
@@ -141,7 +144,7 @@ try {
 }
 ```
 
-### `- Exécution de la commande depuis la racine du projet`
+### 3. Exécution de la commande depuis la racine du projet
 
     php demo/console [commandName]
 
