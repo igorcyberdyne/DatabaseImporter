@@ -70,7 +70,7 @@ class Database
 }
 ```
 
-### <a id="implementation-example"></a> 2. Exemple d'implémentation
+### <a id="implementation-example">2. Exemple d'implémentation</a>
 `- Fichier principale (DatabaseImporter > demo > console)`
 
 ```php
@@ -149,13 +149,13 @@ try {
     php demo/console [commandName]
 
 
-#### <a id="import-from-another-database"></a> Exemple 1 : Importer une base de données A vers une base de données B.
+#### <a id="import-from-another-database">Exemple 1 : Importer une base de données A vers une base de données B</a>
 
 Si vous précisez l'option `--migrationDir` la base de données A sera enrégistrée dans le répertoire précisé dans un fichier `SQL`
 
     php demo/console database:import-from-another-database
 
-#### <a id="export-to-file"></a> Exemple 2 : Exporter une base de données vers un fichier
+#### <a id="export-to-file">Exemple 2 : Exporter une base de données vers un fichier</a>
 
 Le fichier exporté se trouve dans le répertoire indiqué, le nom du fichier correspond à ce format `MigrationV.*.sql`.
 Si l'option n'est pas précisée le fichier sera exporté dans le répertoire temporaire de votre système,
@@ -164,7 +164,7 @@ le chemin vers ce repertoire sera indiqué dans la console à la fin de l'exécu
     php demo/console database:export-to-file --migrationDir='C:\Project\DatabaseImporter'
 
 
-#### <a id="import-from-file"></a> Exemple 3 : Importer une base de données depuis un fichier
+#### <a id="import-from-file">Exemple 3 : Importer une base de données depuis un fichier</a>
 
 Si vous précisez l'option `--migrationDir` la base de données A sera enrégistrée dans le répertoire précisé dans un fichier `SQL`
 
