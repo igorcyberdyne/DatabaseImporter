@@ -35,7 +35,7 @@ les interfaces de configuration des bases de données, utiliser l'instance `Comm
 | database:import-from-file ([exemple ici](#import-from-file))                         | Importer une base de données depuis un fichier             | --dumpFilePath="path\to\file.sql" (obligatoire) | `ImportDatabaseCommandConfig`              |
 
 
-### 1. Présentation des interfaces de config selon les commandes et le modèle de la base de données :
+### 1. Présentation des interfaces de config selon les commandes et le modèle de la base de données
 Les méthodes de l'interface permettent de renseigner les données de connexion aux bases de données source et de destination.
 
 ```php
@@ -70,7 +70,7 @@ class Database
 }
 ```
 
-### <a id="implementation-example">2. Exemple d'implémentation</a>
+### <a id="#implementation-example">2. Exemple d'implémentation</a>
 `- Fichier principale (DatabaseImporter > demo > console)`
 
 ```php
